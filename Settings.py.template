@@ -1,0 +1,22 @@
+ESC_Pin = 4
+
+PWM_Low = 1000
+PWM_High = 2000
+""" Which GPIO Pin the ESC is on """
+
+Steering_Pin = 3
+
+""" Which GPIO Pin the servo for steering it on """
+
+Server_UUID = "Empty"
+
+""" UUID created server-side """
+
+Server_Password = "Empty"
+
+""" Password created by user """
+Headlights_Pin = 26
+
+Using_Blinkstick = True
+
+domain:
