@@ -1,4 +1,4 @@
-import Settings
+import .Settings as Settings
 import time
 from classes import Variable_Holder as VH
 import pigpio
