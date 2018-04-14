@@ -19,4 +19,4 @@ Headlights_Pin = 26
 
 Using_Blinkstick = True
 
-domain:
+domain= "something"
