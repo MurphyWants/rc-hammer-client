@@ -1,4 +1,4 @@
-from .settings import *
+from .Settings import *
 import time
 from classes import Variable_Holder as VH
 import pigpio
