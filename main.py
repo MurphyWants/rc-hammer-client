@@ -11,7 +11,7 @@ import threading
 
 def set_servo(num):
     cos_input = math.cos(math.radians(num))
-        servo_input = 1500 + (cos_input * 950)
+    servo_input = 1500 + (cos_input * 950)
     pi.set_servo_pulsewidth(Settings.Steering_Pin, servo_input)
 
 
