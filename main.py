@@ -8,18 +8,21 @@ import websockets
 import json
 import threading
 
+
 def set_servo(num):
     cos_input = math.cos(math.radians(num))
-	servo_input = 1500 + (cos_input * 950)
+        servo_input = 1500 + (cos_input * 950)
     pi.set_servo_pulsewidth(Settings.Steering_Pin, servo_input)
 
+
 def set_motor(servo, num):
-    mid = (Settings.PWM_High + Settings.PWM_Low)/2
+    mid = (Settings.PWM_High + Settings.PWM_Low) / 2
     mid_scale = Settings.PWM_High - mid
-    scale = (num/100)*mid_scale
+    scale = (num / 100) * mid_scale
     if (math.sin(math.radians(servo)) < 0):
         scale = scale * -1
     pi.set_servo_pulsewidth(Settings.ESC_Pin, scale + mid)
+
 
 def connect_to_ws():
     async def connect():
@@ -42,18 +45,21 @@ def connect_to_ws():
                 vars.append_to_array((drive, scale))
     asyncio.get_event_loop().run_until_complete(connect())
 
+
 def do_servos():
     while True:
         data = VH.pop_array()
         set_servo(data[0])
         set_motor(data[0], data[1])
-        time.sleep(VH.get_sleep_time()/1000)
+        time.sleep(VH.get_sleep_time() / 1000)
+
 
 def init_servo():
     pi.set_servo_pulsewidth(Settings.ESC_Pin, setting.PWM_High)
     time.sleep(1)
     pi.set_servo_pulsewidth(Settings.ESC_Pin, setting.PWM_Low)
     time.sleep(1)
+
 
 def main():
     GPIO.setmode(GPIO.BCM)
@@ -64,6 +70,7 @@ def main():
     pi = pigpio.pi()
     servo_thread = threading.Thread(target=do_servos)
     servo_thread = threading.Thread(target=connect_to_ws)
+
 
 if __name__ == "__main__":
     main()
