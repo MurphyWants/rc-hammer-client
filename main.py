@@ -1,4 +1,4 @@
-import .Settings as Settings
+from .settings import *
 import time
 from classes import Variable_Holder as VH
 import pigpio
@@ -12,24 +12,24 @@ import threading
 def set_servo(num):
     cos_input = math.cos(math.radians(num))
     servo_input = 1500 + (cos_input * 950)
-    pi.set_servo_pulsewidth(Settings.Steering_Pin, servo_input)
+    pi.set_servo_pulsewidth(Steering_Pin, servo_input)
 
 
 def set_motor(servo, num):
-    mid = (Settings.PWM_High + Settings.PWM_Low) / 2
-    mid_scale = Settings.PWM_High - mid
+    mid = (PWM_High + PWM_Low) / 2
+    mid_scale = PWM_High - mid
     scale = (num / 100) * mid_scale
     if (math.sin(math.radians(servo)) < 0):
         scale = scale * -1
-    pi.set_servo_pulsewidth(Settings.ESC_Pin, scale + mid)
+    pi.set_servo_pulsewidth(ESC_Pin, scale + mid)
 
 
 def connect_to_ws():
     async def connect():
-        str = 'ws://' + Settings.domain + '/ws/' + Settings.Server_UUID + '/data/'
+        str = 'ws://' + domain + '/ws/' + Server_UUID + '/data/'
         data = {}
         data['type'] = "Login"
-        data['password'] = Settings.Server_Password
+        data['password'] = Server_Password
 
         async with websockets.connect(str) as websocket:
             sleep(1)
@@ -55,9 +55,9 @@ def do_servos():
 
 
 def init_servo():
-    pi.set_servo_pulsewidth(Settings.ESC_Pin, setting.PWM_High)
+    pi.set_servo_pulsewidth(ESC_Pin, setting.PWM_High)
     time.sleep(1)
-    pi.set_servo_pulsewidth(Settings.ESC_Pin, setting.PWM_Low)
+    pi.set_servo_pulsewidth(ESC_Pin, setting.PWM_Low)
     time.sleep(1)
 
 
