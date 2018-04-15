@@ -35,26 +35,23 @@ def set_motor(servo, num):
 
 
 def connect_to_ws():
-    async def connect():
-        str = 'ws://' + domain + '/ws/' + Server_UUID + '/data/'
-        data = {}
-        data['type'] = "Login"
-        data['password'] = Server_Password
-        print("Connecting to server:\n")
-        async with websockets.connect(str) as websocket:
-            sleep(1)
-            await websocket.send(json.dumps(data))
-            while True:
-                data = await websockets.recv()
-                data = json.loads(data)
-                try:
-                    drive = data['drive']
-                    scale = data['scale']
-                    print("Drive|Scale", drive, scale)
-                    vars.append_to_array((drive, scale))
-                except KeyError:
-                    print("KeyError, should ignore\n")
-    asyncio.get_event_loop().run_until_complete(connect())
+    str = 'ws://' + domain + '/ws/' + Server_UUID + '/data/'
+    data = {}
+    data['type'] = "Login"
+    data['password'] = Server_Password
+    print("Connecting to server:\n")
+    sleep(1)
+    await websocket.send(json.dumps(data))
+    while True:
+        data = await websockets.recv()
+        data = json.loads(data)
+        try:
+            drive = data['drive']
+            scale = data['scale']
+            print("Drive|Scale", drive, scale)
+            vars.append_to_array((drive, scale))
+        except KeyError:
+            print("KeyError, should ignore\n")
 
 
 def do_servos():
