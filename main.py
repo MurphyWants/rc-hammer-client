@@ -43,7 +43,7 @@ def connect_to_ws():
     sleep(1)
     await websocket.send(json.dumps(data))
     while True:
-        data = await websockets.recv()
+        data = websockets.recv()
         data = json.loads(data)
         try:
             drive = data['drive']
