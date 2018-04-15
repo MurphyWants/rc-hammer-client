@@ -1,4 +1,7 @@
-from .Settings import *
+try:
+    from .Settings import *
+except Exception: #ImportError
+    from Settings import *
 import time
 from classes import Variable_Holder as VH
 import pigpio
