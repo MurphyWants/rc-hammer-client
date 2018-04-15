@@ -1,6 +1,6 @@
 class Variable_Holder:
     Command_Array = []
-    Sleep_Time = 1000
+    Sleep_Time = 10
     """
     Sleep_Time in ms
     """
