@@ -13,11 +13,13 @@ import threading
 import RPi.GPIO as GPIO
 
 
+global vars
 
 global pi
 
 pi = pigpio.pi()
 
+vars = VH()
 
 def set_servo(num):
     cos_input = math.cos(math.radians(num))
@@ -91,7 +93,6 @@ if __name__ == "__main__":
     GPIO.setmode(GPIO.BCM)
     print("Init servo function:\n")
     init_servo()
-    vars = VH()
     servo_thread = threading.Thread(target=do_servos, args=(vars,))
     ws_thread = threading.Thread(target=ws_loop, args=(vars,))
     print("Starting tasks...\n")

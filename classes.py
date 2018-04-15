@@ -26,7 +26,7 @@ class Variable_Holder:
             data = self.Command_Array.pop(0)
             self.last_pop = data
             return data
-        except:
+        except IndexError:
             print ("Data: ", data)
             return (self.last_pop[0], 0)
 
