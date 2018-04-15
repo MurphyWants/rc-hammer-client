@@ -52,13 +52,10 @@ def connect_to_ws(vars):
         try:
             drive = data['drive']
             scale = data['scale']
-            print("Drive|Scale", drive, scale)
             if isinstance(drive, type("abc")):
                 drive = int(drive)
             if isinstance(scale, type("abc")):
                 scale = int(scale)
-
-            print("Nonetype? ", type(drive), type(scale))
             vars.append_to_array((drive, scale))
         except KeyError:
             print("KeyError, should ignore\n")
