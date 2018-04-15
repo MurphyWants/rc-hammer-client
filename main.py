@@ -34,7 +34,7 @@ def set_motor(servo, num):
     pi.set_servo_pulsewidth(ESC_Pin, scale + mid)
 
 def connect_to_ws():
-    def on_open(ws,error):
+    def on_open(ws):
         print("Logging in...")
         data = {}
         data['type'] = "Login"
