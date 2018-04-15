@@ -1,6 +1,6 @@
 try:
     from .Settings import *
-except Exception: #ImportError
+except Exception:  # ImportError
     from Settings import *
 import time
 from classes import Variable_Holder as VH
@@ -14,6 +14,10 @@ import RPi.GPIO as GPIO
 
 global vars
 global pi
+
+vars = VH()
+pi = pigpio.pi()
+
 
 def set_servo(num):
     cos_input = math.cos(math.radians(num))
@@ -67,14 +71,8 @@ def init_servo():
     time.sleep(1)
 
 
-def main():
+if __name__ == "__main__":
     GPIO.setmode(GPIO.BCM)
     init_servo()
-    vars = VH()
-    pi = pigpio.pi()
     servo_thread = threading.Thread(target=do_servos)
     servo_thread = threading.Thread(target=connect_to_ws)
-
-
-if __name__ == "__main__":
-    main()
