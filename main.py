@@ -41,7 +41,7 @@ def connect_to_ws():
     data['password'] = Server_Password
     print("Connecting to server:\n")
     sleep(1)
-    await websocket.send(json.dumps(data))
+    websocket.send(json.dumps(data))
     while True:
         data = websockets.recv()
         data = json.loads(data)
