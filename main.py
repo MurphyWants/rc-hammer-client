@@ -12,10 +12,8 @@ import json
 import threading
 import RPi.GPIO as GPIO
 
-global vars
 global pi
 
-vars = VH()
 pi = pigpio.pi()
 
 
@@ -33,7 +31,7 @@ def set_motor(servo, num):
         scale = scale * -1
     pi.set_servo_pulsewidth(ESC_Pin, scale + mid)
 
-def connect_to_ws():
+def connect_to_ws(vars):
     def on_open(ws):
         print("Logging in...")
         data = {}
@@ -70,7 +68,7 @@ def ws_loop():
     while True:
         connect_to_ws()
 
-def do_servos():
+def do_servos(vars):
     while True:
         data = vars.pop_array()
         print("Got data: ", data)
@@ -91,8 +89,9 @@ if __name__ == "__main__":
     GPIO.setmode(GPIO.BCM)
     print("Init servo function:\n")
     init_servo()
-    servo_thread = threading.Thread(target=do_servos)
-    ws_thread = threading.Thread(target=ws_loop)
+    vars = VH()
+    servo_thread = threading.Thread(target=do_servos, args=(vars,))
+    ws_thread = threading.Thread(target=ws_loop, args=(vars,))
     print("Starting tasks...\n")
     servo_thread.start()
     ws_thread.start()
