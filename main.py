@@ -56,7 +56,7 @@ async def connect_to_ws():
                 print("KeyError, should ignore\n")
 
 
-async def do_servos():
+def do_servos():
     while True:
         data = VH.pop_array()
         print("Got data: ", data)
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     GPIO.setmode(GPIO.BCM)
     print("Init servo function:\n")
     init_servo()
-    ervo_thread = threading.Thread(target=do_servos)
+    servo_thread = threading.Thread(target=do_servos)
     ws_thread = threading.Thread(target=connect_to_ws)
     print("Starting tasks...\n")
     servo_thread.start()
