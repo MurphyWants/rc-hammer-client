@@ -53,9 +53,9 @@ def connect_to_ws(vars):
             drive = data['drive']
             scale = data['scale']
             print("Drive|Scale", drive, scale)
-            if isinstance(drive, basestring):
+            if isinstance(drive, type("abc")):
                 drive = int(drive)
-            if isinstance(scale, basestring):
+            if isinstance(scale, type("abc")):
                 scale = int(scale)
 
             print("Nonetype? ", type(drive), type(scale))
