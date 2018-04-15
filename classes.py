@@ -27,7 +27,6 @@ class Variable_Holder:
             self.last_pop = data
             return data
         except IndexError:
-            print ("Data: ", data)
             return (self.last_pop[0], 0)
 
     def get_status(self):

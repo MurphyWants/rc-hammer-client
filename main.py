@@ -57,6 +57,8 @@ def connect_to_ws(vars):
                 drive = int(drive)
             if isinstance(scale, str):
                 scale = int(scale)
+
+            print("Nonetype? ", type(drive), type(scale))
             vars.append_to_array((drive, scale))
         except KeyError:
             print("KeyError, should ignore\n")
