@@ -81,8 +81,8 @@ if __name__ == "__main__":
     servo_thread.start()
     ws_thread.start()'''
     tasks = [
-        asyncio.ensure_future(connect_to_ws)
-        asyncio.ensure_future(do_servos)
+        asyncio.ensure_future(connect_to_ws),
+        asyncio.ensure_future(do_servos),
     ]
     loop.run_until_complete(asyncio.wait(tasks))
     loop.close()
