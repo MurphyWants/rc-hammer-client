@@ -42,7 +42,7 @@ async def connect_to_ws():
     data['password'] = Server_Password
     print("Connecting to server:\n")
     async with websockets.connect(str) as websocket:
-        await asyncio.sleep(1)
+        sleep(1)
         await websocket.send(json.dumps(data))
         while True:
             data = await websockets.recv()
@@ -62,7 +62,7 @@ async def do_servos():
         print("Got data: ", data)
         set_servo(data[0])
         set_motor(data[0], data[1])
-        await asyncio.sleep(VH.get_sleep_time() / 1000)
+        time.sleep(VH.get_sleep_time() / 1000)
 
 
 def init_servo():
@@ -77,14 +77,8 @@ if __name__ == "__main__":
     GPIO.setmode(GPIO.BCM)
     print("Init servo function:\n")
     init_servo()
-    '''servo_thread = threading.Thread(target=do_servos)
+    ervo_thread = threading.Thread(target=do_servos)
     ws_thread = threading.Thread(target=connect_to_ws)
+    print("Starting tasks...\n")
     servo_thread.start()
-    ws_thread.start()'''
-    print("Set tasks...\n")
-    tasks = [
-        asyncio.ensure_future(connect_to_ws),
-        asyncio.ensure_future(do_servos),
-    ]
-    loop.run_until_complete(asyncio.wait(tasks))
-    loop.close()
+    ws_thread.start()
