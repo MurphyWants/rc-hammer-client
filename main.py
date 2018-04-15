@@ -40,7 +40,7 @@ def connect_to_ws():
     data['type'] = "Login"
     data['password'] = Server_Password
     print("Connecting to server:\n")
-    sleep(1)
+    time.sleep(1)
     websocket.send(json.dumps(data))
     while True:
         data = websockets.recv()
