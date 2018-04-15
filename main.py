@@ -83,7 +83,6 @@ def ws_loop(vars):
 def do_servos(vars):
     while True:
         data = vars.pop_array()
-        print("Got data: ", data)
         set_servo(data[0])
         set_motor(data[0], data[1])
         time.sleep(vars.get_sleep_time() / 1000)
