@@ -36,6 +36,7 @@ def set_motor(servo, num):
 
 async def connect_to_ws():
     str = 'ws://' + domain + '/ws/' + Server_UUID + '/data/'
+    print("Connecting to: ", str)
     data = {}
     data['type'] = "Login"
     data['password'] = Server_Password
@@ -80,6 +81,7 @@ if __name__ == "__main__":
     ws_thread = threading.Thread(target=connect_to_ws)
     servo_thread.start()
     ws_thread.start()'''
+    print("Set tasks...\n")
     tasks = [
         asyncio.ensure_future(connect_to_ws),
         asyncio.ensure_future(do_servos),
