@@ -36,7 +36,7 @@ def set_motor(servo, num):
 
     if Invert_Motor:
         scale = scale * -1
-        
+
     pi.set_servo_pulsewidth(ESC_Pin, scale + mid)
 
 def connect_to_ws(vars):
@@ -53,7 +53,11 @@ def connect_to_ws(vars):
             drive = data['drive']
             scale = data['scale']
             print("Drive|Scale", drive, scale)
-            vars.append_to_array((int(drive), int(scale)))
+            if isinstance(drive, str):
+                drive = int(drive)
+            if isinstance(scale, str):
+                scale = int(scale)
+            vars.append_to_array((drive, scale))
         except KeyError:
             print("KeyError, should ignore\n")
 
