@@ -33,6 +33,10 @@ def set_motor(servo, num):
     scale = (num / 100) * mid_scale
     if (math.sin(math.radians(servo)) < 0):
         scale = scale * -1
+
+    if Invert_Motor:
+        scale = scale * -1
+        
     pi.set_servo_pulsewidth(ESC_Pin, scale + mid)
 
 def connect_to_ws(vars):

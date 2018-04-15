@@ -20,3 +20,5 @@ Headlights_Pin = 26
 Using_Blinkstick = True
 
 domain= "something"
+
+Invert_Motor = True
