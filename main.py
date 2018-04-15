@@ -7,7 +7,7 @@ from classes import Variable_Holder as VH
 import pigpio
 import math
 import asyncio
-import websockets
+import websocket
 import json
 import threading
 import RPi.GPIO as GPIO
@@ -33,20 +33,16 @@ def set_motor(servo, num):
         scale = scale * -1
     pi.set_servo_pulsewidth(ESC_Pin, scale + mid)
 
-
 def connect_to_ws():
-    str = 'ws://' + domain + '/ws/' + Server_UUID + '/data/'
-    print("Connecting to: ", str)
-    data = {}
-    data['type'] = "Login"
-    data['password'] = Server_Password
-    print("Connecting to server:\n")
-    websocket = websockets.connect(str)
-    sleep(1)
-    websocket.send(json.dumps(data))
-    while True:
-        data = websockets.recv()
-        data = json.loads(data)
+    def on_open(ws,error):
+        print("Logging in...")
+        data = {}
+        data['type'] = "Login"
+        data['password'] = Server_Password
+        ws.send(json.dumps(data))
+
+    def on_message(ws,message):
+        data = json.loads(message)
         try:
             drive = data['drive']
             scale = data['scale']
@@ -55,6 +51,24 @@ def connect_to_ws():
         except KeyError:
             print("KeyError, should ignore\n")
 
+    def on_error(ws, error):
+        print("Error: ", error)
+
+    def on_close(ws):
+        print("WS, closed")
+
+    str = 'ws://' + domain + '/ws/' + Server_UUID + '/data/'
+    print("Connecting to: ", str)
+    ws = websocket.WebSocketApp(str,
+        on_message = on_message,
+        on_error = on_error,
+        on_close = on_close)
+    ws.on_open = on_open
+    ws.run_forever()
+
+def ws_loop():
+    while True:
+        connect_to_ws()
 
 def do_servos():
     while True:
@@ -78,7 +92,7 @@ if __name__ == "__main__":
     print("Init servo function:\n")
     init_servo()
     servo_thread = threading.Thread(target=do_servos)
-    ws_thread = threading.Thread(target=connect_to_ws)
+    ws_thread = threading.Thread(target=ws_loop)
     print("Starting tasks...\n")
     servo_thread.start()
     ws_thread.start()
