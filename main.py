@@ -12,6 +12,8 @@ import json
 import threading
 import RPi.GPIO as GPIO
 
+global vars
+global pi
 
 def set_servo(num):
     cos_input = math.cos(math.radians(num))
@@ -68,9 +70,7 @@ def init_servo():
 def main():
     GPIO.setmode(GPIO.BCM)
     init_servo()
-    global vars
     vars = VH()
-    global pi
     pi = pigpio.pi()
     servo_thread = threading.Thread(target=do_servos)
     servo_thread = threading.Thread(target=connect_to_ws)
