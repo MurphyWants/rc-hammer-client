@@ -64,9 +64,9 @@ def connect_to_ws(vars):
     ws.on_open = on_open
     ws.run_forever()
 
-def ws_loop():
+def ws_loop(vars):
     while True:
-        connect_to_ws()
+        connect_to_ws(vars)
 
 def do_servos(vars):
     while True:
