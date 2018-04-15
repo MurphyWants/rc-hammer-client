@@ -57,6 +57,7 @@ def connect_to_ws(vars):
             if isinstance(scale, type("abc")):
                 scale = int(scale)
             vars.append_to_array((drive, scale))
+            print("Input: ", drive," ", scale)
         except KeyError:
             print("KeyError, should ignore\n")
 
