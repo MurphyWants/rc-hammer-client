@@ -58,7 +58,7 @@ async def connect_to_ws():
 
 def do_servos():
     while True:
-        data = VH.pop_array()
+        data = vars.pop_array()
         print("Got data: ", data)
         set_servo(data[0])
         set_motor(data[0], data[1])
