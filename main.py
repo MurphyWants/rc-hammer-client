@@ -42,7 +42,7 @@ async def connect_to_ws():
     data['password'] = Server_Password
     print("Connecting to server:\n")
     async with websockets.connect(str) as websocket:
-        sleep(1)
+        await asyncio.sleep(1)
         await websocket.send(json.dumps(data))
         while True:
             data = await websockets.recv()
@@ -62,7 +62,7 @@ async def do_servos():
         print("Got data: ", data)
         set_servo(data[0])
         set_motor(data[0], data[1])
-        time.sleep(VH.get_sleep_time() / 1000)
+        await asyncio.sleep(VH.get_sleep_time() / 1000)
 
 
 def init_servo():
