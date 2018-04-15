@@ -34,27 +34,28 @@ def set_motor(servo, num):
     pi.set_servo_pulsewidth(ESC_Pin, scale + mid)
 
 
-def connect_to_ws():
+async def connect_to_ws():
     str = 'ws://' + domain + '/ws/' + Server_UUID + '/data/'
     data = {}
     data['type'] = "Login"
     data['password'] = Server_Password
     print("Connecting to server:\n")
-    time.sleep(1)
-    websocket.send(json.dumps(data))
-    while True:
-        data = websockets.recv()
-        data = json.loads(data)
-        try:
-            drive = data['drive']
-            scale = data['scale']
-            print("Drive|Scale", drive, scale)
-            vars.append_to_array((drive, scale))
-        except KeyError:
-            print("KeyError, should ignore\n")
+    async with websockets.connect(str) as websocket:
+        sleep(1)
+        await websocket.send(json.dumps(data))
+        while True:
+            data = await websockets.recv()
+            data = json.loads(data)
+            try:
+                drive = data['drive']
+                scale = data['scale']
+                print("Drive|Scale", drive, scale)
+                vars.append_to_array((drive, scale))
+            except KeyError:
+                print("KeyError, should ignore\n")
 
 
-def do_servos():
+async def do_servos():
     while True:
         data = VH.pop_array()
         print("Got data: ", data)
@@ -75,7 +76,13 @@ if __name__ == "__main__":
     GPIO.setmode(GPIO.BCM)
     print("Init servo function:\n")
     init_servo()
-    servo_thread = threading.Thread(target=do_servos)
+    '''servo_thread = threading.Thread(target=do_servos)
     ws_thread = threading.Thread(target=connect_to_ws)
     servo_thread.start()
-    ws_thread.start()
+    ws_thread.start()'''
+    tasks = [
+        asyncio.ensure_future(connect_to_ws)
+        asyncio.ensure_future(do_servos)
+    ]
+    loop.run_until_complete(asyncio.wait(tasks))
+    loop.close()
