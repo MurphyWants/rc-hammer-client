@@ -34,26 +34,26 @@ def set_motor(servo, num):
     pi.set_servo_pulsewidth(ESC_Pin, scale + mid)
 
 
-async def connect_to_ws():
+def connect_to_ws():
     str = 'ws://' + domain + '/ws/' + Server_UUID + '/data/'
     print("Connecting to: ", str)
     data = {}
     data['type'] = "Login"
     data['password'] = Server_Password
     print("Connecting to server:\n")
-    async with websockets.connect(str) as websocket:
-        sleep(1)
-        await websocket.send(json.dumps(data))
-        while True:
-            data = await websockets.recv()
-            data = json.loads(data)
-            try:
-                drive = data['drive']
-                scale = data['scale']
-                print("Drive|Scale", drive, scale)
-                vars.append_to_array((drive, scale))
-            except KeyError:
-                print("KeyError, should ignore\n")
+    websocket = websockets.connect(str)
+    sleep(1)
+    websocket.send(json.dumps(data))
+    while True:
+        data = websockets.recv()
+        data = json.loads(data)
+        try:
+            drive = data['drive']
+            scale = data['scale']
+            print("Drive|Scale", drive, scale)
+            vars.append_to_array((drive, scale))
+        except KeyError:
+            print("KeyError, should ignore\n")
 
 
 def do_servos():
