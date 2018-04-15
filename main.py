@@ -12,6 +12,8 @@ import json
 import threading
 import RPi.GPIO as GPIO
 
+
+
 global pi
 
 pi = pigpio.pi()

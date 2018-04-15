@@ -21,11 +21,13 @@ class Variable_Holder:
             self.Command_Array.append((data[0], data[1]))
 
     def pop_array(self):
+        data = "Null"
         try:
             data = self.Command_Array.pop(0)
             self.last_pop = data
             return data
         except:
+            print ("Data: ", data)
             return (self.last_pop[0], 0)
 
     def get_status(self):
