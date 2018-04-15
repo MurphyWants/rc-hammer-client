@@ -65,9 +65,9 @@ def do_servos():
 
 
 def init_servo():
-    pi.set_servo_pulsewidth(ESC_Pin, setting.PWM_High)
+    pi.set_servo_pulsewidth(ESC_Pin, PWM_High)
     time.sleep(1)
-    pi.set_servo_pulsewidth(ESC_Pin, setting.PWM_Low)
+    pi.set_servo_pulsewidth(ESC_Pin, PWM_Low)
     time.sleep(1)
 
 
