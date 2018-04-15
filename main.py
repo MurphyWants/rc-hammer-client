@@ -40,7 +40,7 @@ def connect_to_ws():
         data = {}
         data['type'] = "Login"
         data['password'] = Server_Password
-
+        print("Connecting to server:\n")
         async with websockets.connect(str) as websocket:
             sleep(1)
             await websocket.send(json.dumps(data))
@@ -50,15 +50,17 @@ def connect_to_ws():
                 try:
                     drive = data['drive']
                     scale = data['scale']
+                    print("Drive|Scale", drive, scale)
+                    vars.append_to_array((drive, scale))
                 except KeyError:
                     print("KeyError, should ignore\n")
-                vars.append_to_array((drive, scale))
     asyncio.get_event_loop().run_until_complete(connect())
 
 
 def do_servos():
     while True:
         data = VH.pop_array()
+        print("Got data: ", data)
         set_servo(data[0])
         set_motor(data[0], data[1])
         time.sleep(VH.get_sleep_time() / 1000)
@@ -72,7 +74,11 @@ def init_servo():
 
 
 if __name__ == "__main__":
+    print("Main function started:\n")
     GPIO.setmode(GPIO.BCM)
+    print("Init servo function:\n")
     init_servo()
     servo_thread = threading.Thread(target=do_servos)
-    servo_thread = threading.Thread(target=connect_to_ws)
+    ws_thread = threading.Thread(target=connect_to_ws)
+    servo_thread.start()
+    ws_thread.start()
