@@ -49,7 +49,7 @@ def connect_to_ws(vars):
             drive = data['drive']
             scale = data['scale']
             print("Drive|Scale", drive, scale)
-            vars.append_to_array((drive, scale))
+            vars.append_to_array((int(drive), int(scale)))
         except KeyError:
             print("KeyError, should ignore\n")
 
