@@ -10,6 +10,7 @@ import asyncio
 import websockets
 import json
 import threading
+import RPi.GPIO as GPIO
 
 
 def set_servo(num):
