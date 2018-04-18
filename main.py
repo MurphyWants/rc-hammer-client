@@ -23,7 +23,9 @@ vars = VH()
 
 def set_servo(num):
     cos_input = math.cos(math.radians(num))
-    servo_input = 1500 + (cos_input * 950)
+    mid_servo = (Servo_High + Servo_Low)/2
+    mid_servo_scale = Servo_High - mid_servo
+    servo_input = mid_servo + (cos_input * mid_servo_scale)
     pi.set_servo_pulsewidth(Steering_Pin, servo_input)
 
 
@@ -46,6 +48,7 @@ def connect_to_ws(vars):
         data['type'] = "Login"
         data['password'] = Server_Password
         ws.send(json.dumps(data))
+        vars.status_connected = False
 
     def on_message(ws,message):
         data = json.loads(message)
@@ -65,6 +68,7 @@ def connect_to_ws(vars):
         print("Error: ", error)
 
     def on_close(ws):
+        vars.status_connected = True
         print("WS, closed")
 
     str = 'ws://' + domain + '/ws/' + Server_UUID + '/data/'
@@ -95,9 +99,50 @@ def init_servo():
     time.sleep(1)
 
 
+def set_blinkstick():
+    from blinkstick import blinkstick
+    while True:
+        for bs in blinkstick.find_all():
+            if status_initial or status_error or status_connected:
+                if status_initial:
+                    try:
+                        bs.blink(name="Yellow", repeats=3, delay=1000)
+                    except:
+                        bs.turn_off()
+                if status_error:
+                    try:
+                        bs.blink(name="Red", repeats=3, delay=1000)
+                    except:
+                        bs.turn_off()
+                if status_connected:
+                    try:
+                        bs.blink(name="Blue", repeats=3, delay=1000)
+                    except:
+                        bs.turn_off()
+            else:
+                bs.set_color(name="Green")
+
+
+def set_headlights():
+    while True:
+        if status_initial or status_error or status_connected:
+            time.sleep(1)
+            GPIO.output(Headlights_Pin,GPIO.LOW)
+            time.sleep(1)
+            GPIO.output(Headlights_Pin,GPIO.HIGH)
+
 if __name__ == "__main__":
     print("Main function started:\n")
     GPIO.setmode(GPIO.BCM)
+    vars.status_initial = True
+    if Using_Blinkstick:
+        print("Blinkstick plugged in, starting...")
+        blinkstick_lights_thread = threading.Thread(target=set_blinkstick, args=(vars,))
+        blinkstick_lights_thread.start()
+    if Headlights_Pin not False:
+        print("Headlights plugged in, start...")
+        headlights_thread = threading.Thread(target=set_headlights, args=(vars,))
+        headlights_thread.start()
     print("Init servo function:\n")
     init_servo()
     servo_thread = threading.Thread(target=do_servos, args=(vars,))
@@ -105,3 +150,4 @@ if __name__ == "__main__":
     print("Starting tasks...\n")
     servo_thread.start()
     ws_thread.start()
+    vars.status_initial = False

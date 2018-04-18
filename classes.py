@@ -1,18 +1,17 @@
 class Variable_Holder:
     Command_Array = []
-    Sleep_Time = 10
+    Sleep_Time = 8
     """
     Sleep_Time in ms
     """
-    Headlight_Methods = ["On", "Off", "Hazards", "Blink_On", "Blink_Off"]
-    Headlight_Current = 0
 
-    Status_Lights = {
-        "Initial": ("Blink", "Yellow"),
-        "Error": ("Solid", "Red"),
-        "Disconnected": ("Blink", "Blue"),
-        "Good": ("Solid", "Green")}
-    Status_Current = 0
+    """
+    Set various status to be interperted by functions set_blinkstick and set_headlights
+    """
+    status_initial = False
+    status_error = False
+    status_connected = False
+
 
     last_pop = (0,0)
 

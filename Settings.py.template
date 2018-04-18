@@ -6,6 +6,9 @@ PWM_High = 2000
 
 Steering_Pin = 3
 
+Servo_Low = 2000
+Servo_High = 2300
+
 """ Which GPIO Pin the servo for steering it on """
 
 Server_UUID = "Empty"
@@ -22,3 +25,5 @@ Using_Blinkstick = True
 domain= "something"
 
 Invert_Motor = True
+
+Headlights_Pin = 26
