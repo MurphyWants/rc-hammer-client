@@ -99,7 +99,7 @@ def init_servo():
     time.sleep(1)
 
 
-def set_blinkstick():
+def set_blinkstick(vars):
     from blinkstick import blinkstick
     while True:
         for bs in blinkstick.find_all():
@@ -124,6 +124,7 @@ def set_blinkstick():
 
 
 def set_headlights(vars):
+    GPIO.setup(Headlights_Pin, GPIO.OUT)
     while True:
         if vars.status_initial or vars.status_error or vars.status_connected:
             time.sleep(1)
