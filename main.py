@@ -103,18 +103,18 @@ def set_blinkstick():
     from blinkstick import blinkstick
     while True:
         for bs in blinkstick.find_all():
-            if status_initial or status_error or status_connected:
+            if vars.status_initial or vars.status_error or vars.status_connected:
                 if status_initial:
                     try:
                         bs.blink(name="Yellow", repeats=3, delay=1000)
                     except:
                         bs.turn_off()
-                if status_error:
+                if vars.status_error:
                     try:
                         bs.blink(name="Red", repeats=3, delay=1000)
                     except:
                         bs.turn_off()
-                if status_connected:
+                if vars.status_connected:
                     try:
                         bs.blink(name="Blue", repeats=3, delay=1000)
                     except:
@@ -123,9 +123,9 @@ def set_blinkstick():
                 bs.set_color(name="Green")
 
 
-def set_headlights():
+def set_headlights(vars):
     while True:
-        if status_initial or status_error or status_connected:
+        if vars.status_initial or vars.status_error or vars.status_connected:
             time.sleep(1)
             GPIO.output(Headlights_Pin,GPIO.LOW)
             time.sleep(1)
