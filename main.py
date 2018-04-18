@@ -139,7 +139,7 @@ if __name__ == "__main__":
         print("Blinkstick plugged in, starting...")
         blinkstick_lights_thread = threading.Thread(target=set_blinkstick, args=(vars,))
         blinkstick_lights_thread.start()
-    if Headlights_Pin not False:
+    if not (Headlights_Pin == False):
         print("Headlights plugged in, start...")
         headlights_thread = threading.Thread(target=set_headlights, args=(vars,))
         headlights_thread.start()
