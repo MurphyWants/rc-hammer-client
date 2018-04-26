@@ -1,29 +1,24 @@
+#!python3
+
 try:
     from .Settings import *
 except Exception:  # ImportError
     from Settings import *
 import time
 from classes import Variable_Holder as VH
-import pigpio
 import math
 import asyncio
 import websocket
 import json
 import threading
-import RPi.GPIO as GPIO
-
 
 global vars
-
-global pi
-
-pi = pigpio.pi()
 
 vars = VH()
 
 
 
-def set_servo(num):
+def set_servo(num, pi):
     cos_input = math.cos(math.radians(num))
     mid_servo = (Servo_High + Servo_Low)/2
     mid_servo_scale = Servo_High - mid_servo
@@ -31,7 +26,7 @@ def set_servo(num):
     pi.set_servo_pulsewidth(Steering_Pin, servo_input)
 
 
-def set_motor(servo, num):
+def set_motor(servo, num, pi):
     mid = (PWM_High + PWM_Low) / 2
     mid_scale = PWM_High - mid
     scale = (num / 100) * mid_scale
@@ -87,15 +82,15 @@ def ws_loop(vars):
     while True:
         connect_to_ws(vars)
 
-def do_servos(vars):
+def do_servos(vars, pi):
     while True:
         data = vars.pop_array()
-        set_servo(data[0])
-        set_motor(data[0], data[1])
+        set_servo(data[0], pi)
+        set_motor(data[0], data[1], pi)
         time.sleep(vars.get_sleep_time() / 1000)
 
 
-def init_servo():
+def init_servo(pi):
     pi.set_servo_pulsewidth(ESC_Pin, PWM_High)
     time.sleep(1)
     pi.set_servo_pulsewidth(ESC_Pin, PWM_Low)
@@ -137,7 +132,9 @@ def set_headlights(vars):
 
 if __name__ == "__main__":
     print("Main function started:\n")
-    GPIO.setmode(GPIO.BCM)
+    if not ((Headlights_Pin == False) or (ESC_Pin == False) or (Steering_Pin == False)):
+    	import RPi.GPIO as GPIO
+    	GPIO.setmode(GPIO.BCM)
     vars.status_initial = True
     if Using_Blinkstick:
         print("Blinkstick plugged in, starting...")
@@ -148,9 +145,11 @@ if __name__ == "__main__":
         headlights_thread = threading.Thread(target=set_headlights, args=(vars,))
         headlights_thread.start()
     print("Init servo function:\n")
-    if not ((ESC_Pin == False) or (Steering_Pin == False):
-	    init_servo()
-  	  servo_thread = threading.Thread(target=do_servos, args=(vars,))
+    if not ((ESC_Pin == False) or (Steering_Pin == False)):
+    	import pigpio
+    	pi = pigpio.pi()
+    	init_servo(pi)
+    	servo_thread = threading.Thread(target=do_servos, args=(vars,pi))
     	servo_thread.start()
     ws_thread = threading.Thread(target=ws_loop, args=(vars,))
     print("Starting tasks...\n")
