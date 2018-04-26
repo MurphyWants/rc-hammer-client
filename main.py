@@ -21,6 +21,8 @@ pi = pigpio.pi()
 
 vars = VH()
 
+
+
 def set_servo(num):
     cos_input = math.cos(math.radians(num))
     mid_servo = (Servo_High + Servo_Low)/2
@@ -145,10 +147,12 @@ if __name__ == "__main__":
         headlights_thread = threading.Thread(target=set_headlights, args=(vars,))
         headlights_thread.start()
     print("Init servo function:\n")
-    init_servo()
-    servo_thread = threading.Thread(target=do_servos, args=(vars,))
+    if not ((ESC_Pin == False) or (Steering_Pin == False):
+	    init_servo()
+  	  servo_thread = threading.Thread(target=do_servos, args=(vars,))
+    	servo_thread.start()
     ws_thread = threading.Thread(target=ws_loop, args=(vars,))
     print("Starting tasks...\n")
-    servo_thread.start()
+    	
     ws_thread.start()
     vars.status_initial = False
