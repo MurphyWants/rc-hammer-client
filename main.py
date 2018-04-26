@@ -54,6 +54,7 @@ def connect_to_ws(vars):
 
     def on_message(ws,message):
         data = json.loads(message)
+        print("Raw data input: ", data)
         try:
             drive = data['drive']
             scale = data['scale']
