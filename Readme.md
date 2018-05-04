@@ -50,7 +50,8 @@ Jonathan Murphy
 # Setup the Client Software
 
 - Install some linux distribution
-- install pip
+- Intall the pigpio library
+- Install pip
 - using pip install the following python3 packages: websocket-client
   - Also install the "blinkstick" package if you're using one
 - Download and configure the software
