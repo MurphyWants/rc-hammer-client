@@ -7,7 +7,6 @@ except Exception:  # ImportError
 import time
 from classes import Variable_Holder as VH
 import math
-import asyncio
 import websocket
 import json
 import threading
